@@ -4,22 +4,27 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SeleniumHelper {
 
 	public WebDriver driver;
+	
+	public static WebDriverWait wait;
 
-	String hubUrl = System.getenv("HUB_URL");
+	static String hubUrl = System.getenv("HUB_URL");
 
 	/*
-	 * Method used to instantiate
+	 * Method used to instantiate the web driver
 	 * 
 	 * @return Driver
 	 */
-	public WebDriver initDriver() throws MalformedURLException {
+	public static WebDriver initDriver() throws MalformedURLException {
 
 		switch (System.getenv("BROWSER_CONFIG")) {
 
@@ -29,9 +34,7 @@ public class SeleniumHelper {
 
 			case "chrome":
 
-				driver = new ChromeDriver();
-
-				return driver;
+				return new ChromeDriver();
 			}
 
 		case "grid":
@@ -45,7 +48,7 @@ public class SeleniumHelper {
 
 				capabilities.setBrowserName(DesiredCapabilities.chrome().getBrowserName());
 
-				return driver = (new RemoteWebDriver(new URL(hubUrl), capabilities));
+				return (new RemoteWebDriver(new URL(hubUrl), capabilities));
 			}
 		}
 
@@ -53,12 +56,26 @@ public class SeleniumHelper {
 	}
 
 	/*
-	 * Method used to navigate to the application under test 
+	 * Method used to navigate to the application under test
+	 * 
 	 * @param Driver
 	 */
-	public void goToApplication(WebDriver driver) {
+	public static void goToApplication(WebDriver driver) {
 
 		driver.get(System.getenv("APP_URL"));
+
+	}
+
+	/*
+	 * Method used that waits until the page loads
+	 * 
+	 * @param Driver, element
+	 */
+	public static void waitForPageLoad(WebDriver driver, WebElement element) {
+		
+		wait = new WebDriverWait(driver,100);
+		
+		wait.until(ExpectedConditions.visibilityOf(element));
 
 	}
 
