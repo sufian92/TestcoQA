@@ -28,11 +28,13 @@ public class AutomationPracticeHomePage extends AutomationPracticeBasePage {
 	 * 
 	 * @return Driver
 	 */
-	public void searchForItem(String item) {
+	public AutomationPracticeResultsPage searchForItem(String item) {
 
 		txtSearchBox.sendKeys(item);
 
 		formSearch.submit();
+		
+		return new AutomationPracticeResultsPage(driver);
 
 	}
 
